@@ -1,68 +1,159 @@
+
 const container = document.getElementById("container");
-const signupBtn = document.getElementById("signupBtn");
-const loginBtn = document.getElementById("loginBtn");
-const mobileSignup = document.getElementById("mobileSignup");
-const mobileLogin = document.getElementById("mobileLogin");
-const loginForm = document.getElementById("loginForm");
-const signupForm = document.getElementById("signupForm");
-const loginMessage = document.getElementById("loginMessage");
-const signupMessage = document.getElementById("signupMessage");
-signupBtn.addEventListener("click", () => {
+
+const signUpButton = document.getElementById("signUpToggle");
+const signInButton = document.getElementById("signInToggle");
+
+const mobileSignUp = document.getElementById("mobileSignUpTab");
+const mobileSignIn = document.getElementById("mobileSignInTab");
+
+signUpButton.addEventListener("click", () => {
     container.classList.add("right-panel-active");
 });
-loginBtn.addEventListener("click", () => {
+
+signInButton.addEventListener("click", () => {
     container.classList.remove("right-panel-active");
 });
-mobileSignup.addEventListener("click", (e) => {
-    e.preventDefault();
+
+mobileSignUp.addEventListener("click", () => {
     container.classList.add("right-panel-active");
+
+    mobileSignUp.classList.add("active");
+    mobileSignIn.classList.remove("active");
 });
-mobileLogin.addEventListener("click", (e) => {
-    e.preventDefault();
+
+mobileSignIn.addEventListener("click", () => {
     container.classList.remove("right-panel-active");
+
+    mobileSignIn.classList.add("active");
+    mobileSignUp.classList.remove("active");
 });
-loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value;
-    if (!email || !password) {
-        loginMessage.style.color = "red";
-        loginMessage.textContent = "Please fill in all fields.";
-        return;
-    }
-    if (password.length < 6) {
-        loginMessage.style.color = "red";
-        loginMessage.textContent = "Password must contain at least 6 characters.";
-        return;
-    }
-    loginMessage.style.color = "green";
-    loginMessage.textContent = "Login form validated successfully!";
+
+const passwordButtons = document.querySelectorAll(".toggle-password");
+
+passwordButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        const input = document.getElementById(button.dataset.target);
+
+        if (input.type === "password") {
+            input.type = "text";
+            button.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+        } else {
+            input.type = "password";
+            button.innerHTML = '<i class="fa-solid fa-eye"></i>';
+        }
+    });
 });
-signupForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+
+const password = document.getElementById("signupPassword");
+const strengthBar = document.getElementById("strengthBarFill");
+const strengthLabel = document.getElementById("strengthLabel");
+
+password.addEventListener("input", () => {
+    let value = password.value;
+    let strength = 0;
+
+    if (value.length >= 8) strength++;
+    if (/[A-Z]/.test(value)) strength++;
+    if (/[0-9]/.test(value)) strength++;
+    if (/[^A-Za-z0-9]/.test(value)) strength++;
+
+    const levels = ["Weak", "Fair", "Good", "Strong"];
+
+    strengthBar.style.width = (strength * 25) + "%";
+
+    strengthLabel.textContent = value.length === 0
+        ? "Enter password"
+        : levels[strength - 1] || "Weak";
+});
+
+const signUpForm = document.getElementById("signUpForm");
+
+signUpForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
     const name = document.getElementById("signupName").value.trim();
     const email = document.getElementById("signupEmail").value.trim();
+    const phone = document.getElementById("signupPhone").value.trim();
     const password = document.getElementById("signupPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    if (!name || !email || !password || !confirmPassword) {
-        signupMessage.style.color = "red";
-        signupMessage.textContent = "Please fill in all fields.";
+    const confirmPassword = document.getElementById("signupConfirmPassword").value;
+    const terms = document.getElementById("signupTerms").checked;
+
+    const message = document.getElementById("signupFeedback");
+
+    if (!name || !email || !phone || !password || !confirmPassword) {
+        message.textContent = "Please fill all the fields.";
         return;
     }
-    if (password.length < 6) {
-        signupMessage.style.color = "red";
-        signupMessage.textContent = "Password must be at least 6 characters.";
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        message.textContent = "Please enter a valid email.";
         return;
     }
+
+    if (password.length < 8) {
+        message.textContent = "Password must contain at least 8 characters.";
+        return;
+    }
+
     if (password !== confirmPassword) {
-        signupMessage.style.color = "red";
-        signupMessage.textContent = "Passwords do not match!";
+        message.textContent = "Passwords do not match.";
         return;
     }
-    signupMessage.style.color = "green";
-    signupMessage.textContent = "Registration form validated successfully!";
+
+    if (!terms) {
+        message.textContent = "Please accept the terms and conditions.";
+        return;
+    }
+
+    message.textContent = "Account created successfully!";
+
+    signUpForm.reset();
+
+    strengthBar.style.width = "0%";
+    strengthLabel.textContent = "Enter password";
 });
-document.getElementById("forgotPassword").addEventListener("click", (e) => {
-    e.preventDefault();
+
+const signInForm = document.getElementById("signInForm");
+
+signInForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const remember = document.getElementById("rememberMe").checked;
+
+    const message = document.getElementById("loginFeedback");
+
+    if (!email || !password) {
+        message.textContent = "Please enter email and password.";
+        return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        message.textContent = "Please enter a valid email.";
+        return;
+    }
+
+    if (remember) {
+        localStorage.setItem("rememberEmail", email);
+    } else {
+        localStorage.removeItem("rememberEmail");
+    }
+
+    message.textContent = "Login successful!";
+
+    signInForm.reset();
+});
+
+const savedEmail = localStorage.getItem("rememberEmail");
+
+if (savedEmail) {
+    document.getElementById("loginEmail").value = savedEmail;
+    document.getElementById("rememberMe").checked = true;
+}
+
+document.getElementById("forgotPassLink").addEventListener("click", (event) => {
+    event.preventDefault();
     alert("Please contact support to reset your password.");
 });
