@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MetaSkillGroup | Login & Signup</title>
+
+    <meta name="description" content="Modern Neumorphic Sliding Login and Signup Form">
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <main class="container" id="container">
+        <section class="form-container login-container">
+
+            <form id="loginForm">
+                <h1>Welcome Back!</h1>
+                <p class="subtitle">Login to continue your journey</p>
+
+                <div class="input-group">
+                    <input type="email" id="loginEmail"
+                        placeholder="Email Address" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="loginPassword"
+                        placeholder="Password" required minlength="6">
+                </div>
+
+                <div class="form-options">
+                    <label>
+                        <input type="checkbox">
+                        Remember me
+                    </label>
+
+                    <a href="#" id="forgotPassword">Forgot Password?</a>
+                </div>
+
+                <button type="submit">Login</button>
+
+                <p class="message" id="loginMessage"></p>
+
+                <p class="mobile-switch">
+                    Don't have an account?
+                    <a href="#" id="mobileSignup">Sign Up</a>
+                </p>
+            </form>
+
+        </section>
+        <section class="form-container signup-container">
+
+            <form id="signupForm">
+                <h1>Create Account</h1>
+                <p class="subtitle">Join us and get started today</p>
+
+                <div class="input-group">
+                    <input type="text" id="signupName"
+                        placeholder="Full Name" required minlength="3">
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="signupEmail"
+                        placeholder="Email Address" required>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="signupPassword"
+                        placeholder="Create Password" required minlength="6">
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="confirmPassword"
+                        placeholder="Confirm Password" required minlength="6">
+                </div>
+
+                <button type="submit">Create Account</button>
+
+                <p class="message" id="signupMessage"></p>
+
+                <p class="mobile-switch">
+                    Already have an account?
+                    <a href="#" id="mobileLogin">Login</a>
+                </p>
+            </form>
+
+        </section>
+        <section class="overlay-container">
+
+            <div class="overlay">
+
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>
+                        Already have an account?
+                        Login and continue exploring with us.
+                    </p>
+                    <button class="ghost" id="loginBtn">
+                        Sign In
+                    </button>
+                </div>
+
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>
+                        New here? Create an account and
+                        start your journey with us today.
+                    </p>
+                    <button class="ghost" id="signupBtn">
+                        Sign Up
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2026 MetaSkillGroup. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
